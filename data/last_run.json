@@ -1,24 +1,23 @@
 {
-  "at": "2026-11-15T12:37:36.424512+00:00",
+  "at": "2026-11-15T19:08:33.502475+00:00",
   "offline": false,
-  "upload": true,
+  "upload": false,
   "results": [
     {
-      "lang": "en",
-      "title": "Bimi Bami Bom Dance Song",
-      "status": "uploaded",
-      "level": 1,
-      "video_id": "Sy94dkNW8SE"
-    },
-    {
       "lang": "hi",
-      "title": "बिमी बामी बोम - रंगों का नाच",
-      "status": "rendered",
-      "level": 1
+      "title": "Bam bam dee dee! Dance Song",
+      "status": "error",
+      "error": "Gemini failed after 4 tries: HTTP 429"
     },
     {
       "lang": "es",
-      "title": "El baile de los colores: ¡Bimi bami bom!",
+      "title": "Bam bam dee dee! Dance Song",
+      "status": "error",
+      "error": "Gemini failed after 4 tries: HTTP 429"
+    },
+    {
+      "lang": "en",
+      "title": "Bam bam dee dee! Dance Song",
       "status": "rendered",
       "level": 1
     }
