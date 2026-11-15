@@ -153,6 +153,15 @@
       "privacy": "private",
       "publish_at": null,
       "short_id": "D8Pc3LGpJ-U"
+    },
+    {
+      "lang": "en",
+      "title": "Bimi Bami Bom Dance Song",
+      "video_id": "Sy94dkNW8SE",
+      "mode": "dance",
+      "at": "2026-11-15T12:37:31.767932+00:00",
+      "privacy": "private",
+      "publish_at": null
     }
   ],
   "done_dance_topics": [
@@ -174,7 +183,8 @@
     "a counting one two three dance",
     "a happy kitten dance",
     "a butterfly garden dance",
-    "a pirate ship dance"
+    "a pirate ship dance",
+    "a rainbow dance"
   ],
   "compilations": [
     {

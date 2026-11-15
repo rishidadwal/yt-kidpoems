@@ -1,23 +1,24 @@
 {
-  "at": "2026-11-15T11:49:15.988766+00:00",
+  "at": "2026-11-15T12:37:36.424512+00:00",
   "offline": false,
-  "upload": false,
+  "upload": true,
   "results": [
     {
+      "lang": "en",
+      "title": "Bimi Bami Bom Dance Song",
+      "status": "uploaded",
+      "level": 1,
+      "video_id": "Sy94dkNW8SE"
+    },
+    {
       "lang": "hi",
-      "title": "Wooz wooz kiki kiki! Dance Song",
-      "status": "error",
-      "error": "Gemini failed after 4 tries: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=90)"
+      "title": "बिमी बामी बोम - रंगों का नाच",
+      "status": "rendered",
+      "level": 1
     },
     {
       "lang": "es",
-      "title": "Wooz wooz kiki kiki! Dance Song",
-      "status": "error",
-      "error": "Gemini failed after 4 tries: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=90)"
-    },
-    {
-      "lang": "en",
-      "title": "Wooz wooz kiki kiki! Dance Song",
+      "title": "El baile de los colores: ¡Bimi bami bom!",
       "status": "rendered",
       "level": 1
     }
