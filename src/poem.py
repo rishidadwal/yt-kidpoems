@@ -34,7 +34,7 @@ def _gemini(prompt: str, model: str, retries: int = 4) -> dict:
     last = None
     for attempt in range(retries):
         try:
-            r = requests.post(GEMINI_URL.format(model=model), params={"key": key}, json=body, timeout=90)
+            r = requests.post(GEMINI_URL.format(model=model), headers={"x-goog-api-key": key}, json=body, timeout=90)
             if r.status_code == 429 or r.status_code >= 500:  # free-tier rate limit / server busy
                 raise PoemError(f"HTTP {r.status_code}")
             r.raise_for_status()

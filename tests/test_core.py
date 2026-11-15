@@ -346,3 +346,21 @@ def test_gemini_errors_never_contain_the_api_key(monkeypatch):
     with pytest.raises(P.PoemError) as ei:
         P._gemini("hi", "m", retries=2)
     assert "SECRET123" not in str(ei.value) and "key=***" in str(ei.value)
+
+
+def test_gemini_key_goes_in_a_header_not_the_url(monkeypatch):
+    seen: dict = {}
+
+    class R:
+        status_code = 200
+        def raise_for_status(self): pass
+        def json(self): return {"candidates": [{"content": {"parts": [{"text": '{"ok": 1}'}]}}]}
+
+    def fake_post(url, **kw):
+        seen.update(url=url, **kw)
+        return R()
+    monkeypatch.setenv("GEMINI_API_KEY", "AQ.SECRET123")
+    monkeypatch.setattr(P.requests, "post", fake_post)
+    assert P._gemini("hi", "m") == {"ok": 1}
+    assert seen["headers"]["x-goog-api-key"] == "AQ.SECRET123"
+    assert "SECRET123" not in seen["url"] and "key" not in (seen.get("params") or {})
