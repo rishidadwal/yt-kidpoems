@@ -1,23 +1,23 @@
 {
-  "at": "2026-11-14T21:20:49.613301+00:00",
+  "at": "2026-11-15T11:16:43.526623+00:00",
   "offline": false,
   "upload": false,
   "results": [
     {
       "lang": "hi",
-      "title": "Bim bim kiki kiki! Dance Song",
+      "title": "Yay yay tak tak! Dance Song",
       "status": "error",
-      "error": "Gemini failed after 4 tries: 401 Client Error: Unauthorized for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=***"
+      "error": "Gemini failed after 4 tries: 404 Client Error: Not Found for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
     },
     {
       "lang": "es",
-      "title": "Bim bim kiki kiki! Dance Song",
+      "title": "Yay yay tak tak! Dance Song",
       "status": "error",
-      "error": "Gemini failed after 4 tries: 401 Client Error: Unauthorized for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=***"
+      "error": "Gemini failed after 4 tries: 404 Client Error: Not Found for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
     },
     {
       "lang": "en",
-      "title": "Bim bim kiki kiki! Dance Song",
+      "title": "Yay yay tak tak! Dance Song",
       "status": "rendered",
       "level": 1
     }
