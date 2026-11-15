@@ -1,23 +1,23 @@
 {
-  "at": "2026-11-15T11:16:43.526623+00:00",
+  "at": "2026-11-15T11:49:15.988766+00:00",
   "offline": false,
   "upload": false,
   "results": [
     {
       "lang": "hi",
-      "title": "Yay yay tak tak! Dance Song",
+      "title": "Wooz wooz kiki kiki! Dance Song",
       "status": "error",
-      "error": "Gemini failed after 4 tries: 404 Client Error: Not Found for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+      "error": "Gemini failed after 4 tries: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=90)"
     },
     {
       "lang": "es",
-      "title": "Yay yay tak tak! Dance Song",
+      "title": "Wooz wooz kiki kiki! Dance Song",
       "status": "error",
-      "error": "Gemini failed after 4 tries: 404 Client Error: Not Found for url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+      "error": "Gemini failed after 4 tries: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=90)"
     },
     {
       "lang": "en",
-      "title": "Yay yay tak tak! Dance Song",
+      "title": "Wooz wooz kiki kiki! Dance Song",
       "status": "rendered",
       "level": 1
     }
