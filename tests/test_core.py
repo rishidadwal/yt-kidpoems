@@ -394,3 +394,48 @@ def test_gpu_accepts_new_kaggle_api_token(monkeypatch):
     monkeypatch.delenv("KAGGLE_API_TOKEN")
     monkeypatch.setenv("KAGGLE_KEY", "k")
     assert gpu.available()                          # legacy key still works
+
+
+def test_kaggle_creates_dataset_when_version_is_forbidden(monkeypatch, tmp_path):
+    """A brand-new account has no dataset yet; Kaggle answers 403 (not 404) to 'version'."""
+    from src import gpu
+    calls: list[str] = []
+
+    def fake(*args, **kw):
+        calls.append(args[1])
+        if args[1] == "version":
+            raise RuntimeError("kaggle datasets version failed: 403 Client Error: Forbidden for url: ...")
+        return "ready"
+    monkeypatch.setattr(gpu, "_kaggle", fake)
+    gpu._upload_dataset("me", tmp_path)
+    assert calls[:2] == ["version", "create"]
+
+
+def test_gemini_switches_to_a_live_model_when_the_name_is_retired(monkeypatch):
+    posted: list[str] = []
+
+    class R:
+        def __init__(self, code, data=None): self.status_code, self._d = code, data or {}
+        def raise_for_status(self):
+            if self.status_code >= 400:
+                raise P.requests.HTTPError(f"{self.status_code} Client Error")
+        def json(self): return self._d
+
+    def fake_post(url, **kw):
+        posted.append(url)
+        if "old-flash" in url:
+            return R(404)
+        return R(200, {"candidates": [{"content": {"parts": [{"text": '{"ok": 1}'}]}}]})
+    models = {"models": [
+        {"name": "models/gemini-9.0-flash-image", "supportedGenerationMethods": ["generateContent"]},
+        {"name": "models/gemini-3.1-flash", "supportedGenerationMethods": ["generateContent"]},
+        {"name": "models/gemini-3.2-flash-lite", "supportedGenerationMethods": ["generateContent"]},
+        {"name": "models/gemini-3.0-flash", "supportedGenerationMethods": ["generateContent"]},
+        {"name": "models/gemini-9.0-pro", "supportedGenerationMethods": ["generateContent"]},
+    ]}
+    monkeypatch.setenv("GEMINI_API_KEY", "k")
+    monkeypatch.setattr(P.requests, "post", fake_post)
+    monkeypatch.setattr(P.requests, "get", lambda url, **kw: R(200, models))
+    monkeypatch.setattr(P.time, "sleep", lambda s: None)
+    assert P._gemini("hi", "old-flash") == {"ok": 1}
+    assert "gemini-3.1-flash:generateContent" in posted[-1]   # newest plain flash, not lite/image/pro

@@ -23,6 +23,28 @@ class PoemError(RuntimeError):
     pass
 
 
+MODELS_URL = "https://generativelanguage.googleapis.com/v1beta/models"
+
+
+def _version(name: str) -> tuple[int, ...]:
+    return tuple(int(x) for x in re.findall(r"\d+", name.split("gemini-", 1)[-1])[:3])
+
+
+def _live_flash_model(key: str) -> str | None:
+    """Google retires model names; ask the API for the newest plain 'flash' text model that still exists."""
+    try:
+        r = requests.get(MODELS_URL, headers={"x-goog-api-key": key}, params={"pageSize": 200}, timeout=30)
+        r.raise_for_status()
+        names = [m["name"].removeprefix("models/") for m in r.json().get("models", [])
+                 if "generateContent" in m.get("supportedGenerationMethods", [])]
+    except (requests.RequestException, KeyError, ValueError) as e:
+        print(f"[warn] could not list Gemini models: {type(e).__name__}")
+        return None
+    skip = ("lite", "image", "tts", "live", "audio", "embedding", "thinking", "preview", "exp")
+    flash = [n for n in names if "flash" in n and not any(w in n for w in skip)]
+    return max(flash, key=_version) if flash else None
+
+
 def _gemini(prompt: str, model: str, retries: int = 4) -> dict:
     key = os.environ.get("GEMINI_API_KEY")
     if not key:
@@ -35,6 +57,12 @@ def _gemini(prompt: str, model: str, retries: int = 4) -> dict:
     for attempt in range(retries):
         try:
             r = requests.post(GEMINI_URL.format(model=model), headers={"x-goog-api-key": key}, json=body, timeout=90)
+            if r.status_code == 404:  # model name retired -> switch once to a live one
+                new = _live_flash_model(key)
+                if new and new != model:
+                    print(f"[warn] Gemini model {model!r} is gone; using {new!r} (update llm_model in config.yaml)")
+                    model = new
+                    continue
             if r.status_code == 429 or r.status_code >= 500:  # free-tier rate limit / server busy
                 raise PoemError(f"HTTP {r.status_code}")
             r.raise_for_status()

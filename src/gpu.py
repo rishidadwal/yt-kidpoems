@@ -49,7 +49,8 @@ def _upload_dataset(user: str, job_dir: Path) -> None:
     try:
         _kaggle("datasets", "version", "-p", str(job_dir), "-m", f"job {int(time.time())}", "--dir-mode", "zip")
     except RuntimeError as e:
-        if "not found" in str(e).lower() or "404" in str(e) or "does not exist" in str(e).lower():
+        msg = str(e).lower()  # a new account has no dataset yet: Kaggle says 404, or 403 for one that isn't yours
+        if any(w in msg for w in ("not found", "404", "does not exist", "403", "forbidden")):
             _kaggle("datasets", "create", "-p", str(job_dir), "--dir-mode", "zip")
         else:
             raise
