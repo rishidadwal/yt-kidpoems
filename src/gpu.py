@@ -153,7 +153,7 @@ def build_job(cfg: dict, per_lang: dict[str, dict], prompts: list[str], seed: in
         "images": ({"prompts": prompts, "style": style, "model": g.get("image_model", "stabilityai/stable-diffusion-xl-base-1.0"),
                     "steps": int(g.get("image_steps", 30))} if g.get("hd_images", True) else {}),
         "video_model": g.get("video_model", "Lightricks/LTX-Video"),
-        "clip_frames": int(g.get("clip_frames", 97)),
+        "clip_frames": int(g.get("clip_frames", 65)),
         "clip_steps": int(g.get("clip_steps", 30)),
         "clip_budget_minutes": int(g.get("clip_budget_minutes", 120)),
     }

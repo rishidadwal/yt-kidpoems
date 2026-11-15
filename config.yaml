@@ -63,7 +63,7 @@ gpu:
   image_model: "stabilityai/stable-diffusion-xl-base-1.0"
   max_animated_scenes: 8           # others stay as moving pictures (saves GPU time)
   video_model: "Lightricks/LTX-Video"
-  clip_frames: 97                  # ~4 s per scene at 24 fps
+  clip_frames: 65                  # ~2.7 s per scene at 24 fps (97 ran out of T4 memory)
   clip_steps: 30
   clip_budget_minutes: 120
   timeout_minutes: 170             # give up waiting after this and use Level 1

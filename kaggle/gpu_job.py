@@ -28,7 +28,16 @@ def save_status():
 
 
 def pip(*pkgs):
-    subprocess.run([sys.executable, "-m", "pip", "install", "-q", *pkgs], check=True)
+    r = subprocess.run([sys.executable, "-m", "pip", "install", "-q", *pkgs], capture_output=True, text=True, check=False)
+    if r.returncode:  # keep pip's real reason so status.json shows it
+        raise RuntimeError(f"pip install {' '.join(pkgs)} failed: {r.stderr[-1500:]}")
+
+
+def free_gpu():
+    import gc
+    import torch
+    gc.collect()
+    torch.cuda.empty_cache()
 
 
 def find_job():
@@ -83,7 +92,14 @@ def make_songs():
     if not JOB.get("songs"):
         return
     try:
-        pip("git+https://github.com/ace-step/ACE-Step.git", "faster-whisper", "soundfile")
+        pip("faster-whisper", "soundfile")
+        try:
+            pip("git+https://github.com/ace-step/ACE-Step.git")
+        except RuntimeError as e:  # its strict pins clash with Kaggle's torch; install without them
+            STATUS["errors"].append(f"ace-step full install failed, retrying --no-deps: {str(e)[-400:]}")
+            pip("--no-deps", "git+https://github.com/ace-step/ACE-Step.git")
+            pip("diffusers", "transformers", "accelerate", "librosa", "loguru", "py3langid", "hangul-romanize",
+                "num2words", "spacy", "pypinyin", "cutlet", "fugashi[unidic-lite]", "datasets", "matplotlib")
         import torch
         from acestep.pipeline_ace_step import ACEStepPipeline
         bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
@@ -113,8 +129,7 @@ def make_songs():
             STATUS["errors"].append(f"song {lang}: {e}\n{traceback.format_exc()[-800:]}")
         save_status()
     del pipe
-    import gc, torch  # noqa: E401
-    gc.collect(); torch.cuda.empty_cache()
+    free_gpu()
 
 
 # ------------------------------------------------------------------ 2. HD pictures (SDXL, CreativeML OpenRAIL++)
@@ -132,7 +147,7 @@ def make_images():
         pipe = StableDiffusionXLPipeline.from_pretrained(spec.get("model", "stabilityai/stable-diffusion-xl-base-1.0"),
                                                          torch_dtype=torch.float16, variant="fp16", use_safetensors=True)
         pipe.to("cuda")
-        pipe.enable_vae_tiling()
+        pipe.vae.enable_tiling()  # pipe.enable_vae_tiling() was removed in new diffusers
     except Exception as e:  # noqa: BLE001
         STATUS["errors"].append(f"sdxl setup: {e}\n{traceback.format_exc()[-800:]}")
         return
@@ -151,8 +166,7 @@ def make_images():
         except Exception as e:  # noqa: BLE001
             STATUS["errors"].append(f"image {i}: {e}")
     del pipe
-    import gc
-    gc.collect(); torch.cuda.empty_cache()
+    free_gpu()
     save_status()
 
 
@@ -168,7 +182,8 @@ def make_clips():
         from diffusers.utils import export_to_video, load_image
         dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
         pipe = LTXImageToVideoPipeline.from_pretrained(JOB.get("video_model", "Lightricks/LTX-Video"), torch_dtype=dtype)
-        pipe.enable_model_cpu_offload()
+        free_gpu()
+        pipe.enable_sequential_cpu_offload()  # model offload still hit OOM on a 15 GB T4
         pipe.vae.enable_tiling()
     except Exception as e:  # noqa: BLE001
         STATUS["errors"].append(f"ltx setup: {e}\n{traceback.format_exc()[-800:]}")
@@ -182,12 +197,13 @@ def make_clips():
             t0 = time.time()
             src = HD.get(sc["index"]) or os.path.join(JOB_DIR, sc["image"])   # prefer the new HD picture
             img = load_image(src).resize((704, 480))
+            free_gpu()
             frames = pipe(image=img,
                           prompt=sc["prompt"] + ", smooth gentle joyful motion, characters moving and playing, "
                                                 "high quality 3D cartoon animation, stable camera",
                           negative_prompt="worst quality, inconsistent motion, blurry, jittery, distorted, "
                                           "deformed faces, extra limbs, text, watermark, scary",
-                          width=704, height=480, num_frames=JOB.get("clip_frames", 97),
+                          width=704, height=480, num_frames=JOB.get("clip_frames", 65),
                           num_inference_steps=JOB.get("clip_steps", 30), guidance_scale=3.0).frames[0]
             export_to_video(frames, f"{OUT}/clip_{sc['index']:02d}.mp4", fps=24)
             STATUS["clips"][str(sc["index"])] = {"ok": True, "seconds": round(time.time() - t0)}
