@@ -61,11 +61,11 @@ gpu:
   animate: true
   hd_images: true                  # SDXL on the GPU: sharper, more consistent pictures than the free API
   image_model: "stabilityai/stable-diffusion-xl-base-1.0"
-  max_animated_scenes: 8           # others stay as moving pictures (saves GPU time)
+  max_animated_scenes: 5           # others stay as moving pictures (saves GPU time)
   video_model: "Lightricks/LTX-Video"
   clip_frames: 65                  # ~2.7 s per scene at 24 fps (97 ran out of T4 memory)
   clip_steps: 30
-  clip_budget_minutes: 120
+  clip_budget_minutes: 60          # 120 + setup ran past timeout_minutes, so nothing came back
   timeout_minutes: 170             # give up waiting after this and use Level 1
 
 # ---------- Weekly compilation (long video = more watch time) ----------
