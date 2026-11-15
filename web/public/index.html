@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KidPoems Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8fb;--card:#fff;--text:#2a1f33;--muted:#7a6d85;--p:#dd2a7b;--ok:#16a34a;--err:#dc2626;--warn:#d97706;--line:#f1dfe9}
+@media(prefers-color-scheme:dark){:root{--bg:#120d16;--card:#1d1624;--text:#f5eefa;--muted:#b3a6bf;--line:#33283d}}
+*{box-sizing:border-box}body{margin:0;font-family:Poppins,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1000px;margin:0 auto;padding:20px 16px 60px}
+h1{margin:0;font-size:26px}h2{font-size:17px;margin:0 0 10px}.muted{color:var(--muted);font-size:13px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px}
+.btn{border:0;border-radius:12px;padding:11px 16px;font:inherit;font-weight:600;cursor:pointer;color:#fff;background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af)}
+.btn.sec{background:var(--card);color:var(--text);border:1.5px solid var(--line)}.btn:disabled{opacity:.5}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;color:#fff}
+.success,.uploaded{background:var(--ok)}.failure,.error,.upload_error{background:var(--err)}.in_progress,.queued,.rendered{background:var(--warn)}.neutral{background:var(--muted)}
+input{padding:11px;border-radius:12px;border:1.5px solid var(--line);font:inherit;background:var(--card);color:var(--text);width:240px}
+a{color:var(--p)}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat b{font-size:26px;display:block}
+@media(max-width:640px){.grid{grid-template-columns:1fr 1fr}.hide-sm{display:none}}
+#login{max-width:360px;margin:15vh auto;text-align:center}
+</style></head><body>
+<div id="login" class="card"><h1>🎵 KidPoems</h1><p class="muted">Enter your dashboard password</p>
+<input id="pw" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()"><p><button class="btn" onclick="login()">Open</button></p><p id="lerr" class="muted"></p></div>
+<div id="app" class="wrap" hidden>
+ <div class="top"><div><h1>🎵 KidPoems</h1><span class="muted" id="upd">Loading…</span></div>
+  <div><button class="btn sec" onclick="run('no')" id="b2">▶ Test run (no upload)</button> <button class="btn" onclick="run('yes')" id="b1">🚀 Run now</button></div></div>
+ <div class="grid">
+  <div class="card stat"><span class="muted">Videos uploaded</span><b id="s1">–</b></div>
+  <div class="card stat"><span class="muted">Topics done</span><b id="s2">–</b></div>
+  <div class="card stat"><span class="muted">Last run</span><b id="s3">–</b></div>
+ </div>
+ <div class="card"><h2>Last run – per language</h2><table id="last"></table></div>
+ <div class="card"><h2>Pipeline runs (GitHub Actions)</h2><table id="runs"></table></div>
+ <div class="card"><h2>Recent videos</h2><table id="vids"></table><p class="muted">Uploads are private while review_mode is on – publish them in YouTube Studio.</p></div>
+</div>
+<script>
+let PW=sessionStorage.getItem('pw')||'';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pill=s=>`<span class="pill ${esc(s)}">${esc(s||'…')}</span>`;
+const when=t=>t?new Date(t).toLocaleString():'–';
+async function api(path,opt={}){const r=await fetch(path,{...opt,headers:{'x-dashboard-password':PW,'Content-Type':'application/json',...(opt.headers||{})}});
+ const j=await r.json().catch(()=>({error:'bad response'}));if(!r.ok)throw Object.assign(new Error(j.error||r.status),{code:r.status});return j}
+async function login(){PW=document.getElementById('pw').value;try{await load();sessionStorage.setItem('pw',PW);document.getElementById('login').hidden=true;document.getElementById('app').hidden=false}catch(e){document.getElementById('lerr').textContent=e.code===401?'Wrong password':e.message}}
+async function load(){const d=await api('/api/status');
+ document.getElementById('s1').textContent=d.videos.length;document.getElementById('s2').textContent=d.topics_done;
+ const r0=d.runs[0];document.getElementById('s3').innerHTML=r0?pill(r0.conclusion||r0.status):'–';
+ document.getElementById('upd').textContent='Updated '+new Date().toLocaleTimeString();
+ const L=d.last_run;document.getElementById('last').innerHTML=L&&L.results.length?'<tr><th>Lang</th><th>Title</th><th>Status</th><th class="hide-sm">Details</th></tr>'+L.results.map(x=>`<tr><td>${esc(x.lang)}</td><td>${esc(x.title)}</td><td>${pill(x.status)}</td><td class="hide-sm">${x.video_id?`<a target=_blank href="https://youtu.be/${esc(x.video_id)}">video</a>`:''} ${x.short_id?`<a target=_blank href="https://youtu.be/${esc(x.short_id)}">short</a>`:''} ${esc(x.error||'')}</td></tr>`).join(''):'<tr><td class="muted">No run yet</td></tr>';
+ document.getElementById('runs').innerHTML='<tr><th>Started</th><th>Trigger</th><th>Result</th><th></th></tr>'+d.runs.map(x=>`<tr><td>${when(x.started)}</td><td>${esc(x.event)}</td><td>${pill(x.conclusion||x.status)}</td><td><a target=_blank href="${esc(x.url)}">logs</a></td></tr>`).join('');
+ document.getElementById('vids').innerHTML=d.videos.length?'<tr><th>Lang</th><th>Title</th><th class="hide-sm">Uploaded</th><th></th></tr>'+d.videos.map(v=>`<tr><td>${esc(v.lang)}</td><td>${esc(v.title)}</td><td class="hide-sm">${when(v.at+'Z')}</td><td><a target=_blank href="https://youtu.be/${esc(v.video_id)}">open</a></td></tr>`).join(''):'<tr><td class="muted">No videos yet</td></tr>'}
+async function run(up){if(!confirm(up==='yes'?'Start a full run and upload to YouTube?':'Start a test run without uploading?'))return;
+ ['b1','b2'].forEach(i=>document.getElementById(i).disabled=true);
+ try{await api('/api/run',{method:'POST',body:JSON.stringify({upload:up})});alert('Started! It appears in the runs list within a minute.');setTimeout(load,8000)}catch(e){alert('Failed: '+e.message)}
+ finally{['b1','b2'].forEach(i=>document.getElementById(i).disabled=false)}}
+if(PW)login().catch(()=>{});setInterval(()=>{if(!document.getElementById('app').hidden)load().catch(()=>{})},30000);
+</script></body></html>

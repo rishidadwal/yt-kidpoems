@@ -1,0 +1,41 @@
+name: weekly-compilation
+on:
+  schedule:
+    - cron: "30 2 * * 0"      # Sundays 08:00 IST
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: "Upload to YouTube?"
+        type: choice
+        options: ["yes", "no"]
+        default: "yes"
+concurrency: { group: kidpoems, cancel-in-progress: false }
+permissions:
+  contents: write
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-core fonts-noto-cjk libraqm0
+      - run: pip install -r requirements.txt
+      - name: Build & upload compilations
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_EN_REFRESH_TOKEN: ${{ secrets.YT_EN_REFRESH_TOKEN }}
+          YT_HI_REFRESH_TOKEN: ${{ secrets.YT_HI_REFRESH_TOKEN }}
+          YT_ES_REFRESH_TOKEN: ${{ secrets.YT_ES_REFRESH_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.upload }}" = "no" ]; then python -m src.compile --no-upload; else python -m src.compile; fi
+      - name: Save history
+        if: always()
+        run: |
+          git config user.name "kidpoems-bot"; git config user.email "bot@users.noreply.github.com"
+          git add data/history.json && git commit -m "chore: compilation history [skip ci]" || exit 0
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push || true

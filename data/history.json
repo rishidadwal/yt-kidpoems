@@ -1,0 +1,185 @@
+{
+  "done_topics": [],
+  "done_rhymes": [
+    "Rain Rain Go Away",
+    "Humpty Dumpty",
+    "Hickory Dickory Dock",
+    "Jack and Jill",
+    "Hey Diddle Diddle",
+    "Baa Baa Black Sheep",
+    "Twinkle Twinkle Little Star",
+    "Little Bo Peep",
+    "Twinkle Twinkle Little Star",
+    "Hickory Dickory Dock",
+    "Jack and Jill",
+    "Baa Baa Black Sheep",
+    "Hickory Dickory Dock",
+    "Baa Baa Black Sheep",
+    "Hickory Dickory Dock",
+    "Humpty Dumpty",
+    "Rain Rain Go Away",
+    "Humpty Dumpty"
+  ],
+  "videos": [
+    {
+      "lang": "en",
+      "title": "Humpty Dumpty",
+      "video_id": "sY7JKobEiik",
+      "at": "2026-09-26T17:04:26.524540",
+      "short_id": "xrWEYUZlsvE"
+    },
+    {
+      "lang": "en",
+      "title": "Hickory Dickory Dock",
+      "video_id": "KgFaWJxqQ6Q",
+      "at": "2026-09-26T18:06:52.177209",
+      "short_id": "IfyX6ODZoW0"
+    },
+    {
+      "lang": "en",
+      "title": "Jack and Jill",
+      "video_id": "gMQHw8X_9HU",
+      "mode": "poem",
+      "at": "2026-09-27T07:03:54.970832+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "Vi67ZWs6-p0"
+    },
+    {
+      "lang": "en",
+      "title": "Bim bim boo boo! Dance Song",
+      "video_id": "TUS8hR9FbUs",
+      "mode": "dance",
+      "at": "2026-09-28T07:35:10.248917+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "S2mz4uRkFqE"
+    },
+    {
+      "lang": "en",
+      "title": "Hey Diddle Diddle",
+      "video_id": "IfNytFt6ej8",
+      "mode": "poem",
+      "at": "2026-09-29T07:28:13.109809+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "dlbzar97eSA"
+    },
+    {
+      "lang": "en",
+      "title": "Pom pom boo boo! Dance Song",
+      "video_id": "SRMBax0VIiI",
+      "mode": "dance",
+      "at": "2026-09-30T07:23:40.804250+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "fKAWsZXh0hM"
+    },
+    {
+      "lang": "en",
+      "title": "Baa Baa Black Sheep",
+      "video_id": "vHcVsQNRvFU",
+      "mode": "poem",
+      "at": "2026-10-01T07:42:24.622606+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "xPTogGDQ9CE"
+    },
+    {
+      "lang": "en",
+      "title": "Zum zum wooz wooz! Dance Song",
+      "video_id": "Ax5EyTr6TK4",
+      "mode": "dance",
+      "at": "2026-10-02T07:35:22.051999+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "fs-dzHrMLBQ"
+    },
+    {
+      "lang": "en",
+      "title": "Twinkle Twinkle Little Star",
+      "video_id": "ucsM-msw6eg",
+      "mode": "poem",
+      "at": "2026-10-03T07:03:51.656117+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "KhFW163oju8"
+    },
+    {
+      "lang": "en",
+      "title": "Twinkle Twinkle Little Star",
+      "video_id": "gb5k62FG4fg",
+      "mode": "poem",
+      "at": "2026-10-07T16:50:41.115147+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "UG2NsgqPhRE"
+    },
+    {
+      "lang": "en",
+      "title": "Zum zum tak tak! Dance Song",
+      "video_id": "_fmBBcDk0Bw",
+      "mode": "dance",
+      "at": "2026-10-08T08:04:39.976875+00:00",
+      "privacy": "private",
+      "publish_at": null
+    },
+    {
+      "lang": "en",
+      "title": "Hickory Dickory Dock",
+      "video_id": "FKBQKv46WMU",
+      "mode": "poem",
+      "at": "2026-10-09T07:57:18.641365+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "QPlqXdtv4dw"
+    },
+    {
+      "lang": "en",
+      "title": "Boo boo ba ba! Dance Song",
+      "video_id": "D3DsZBiod_s",
+      "mode": "dance",
+      "at": "2026-10-10T07:48:37.394030+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "BZA4QVpmndU"
+    },
+    {
+      "lang": "en",
+      "title": "Jack and Jill",
+      "video_id": "3i24CKR-cdA",
+      "mode": "poem",
+      "at": "2026-10-11T07:48:06.535803+00:00",
+      "privacy": "private",
+      "publish_at": null,
+      "short_id": "D8Pc3LGpJ-U"
+    }
+  ],
+  "done_dance_topics": [
+    "a jungle animal dance party",
+    "a silly monkey dance",
+    "a rainy day puddle dance",
+    "a birthday party dance",
+    "a dinosaur stomp dance",
+    "a sunny beach dance",
+    "a bedtime wiggle dance",
+    "a farm animal disco",
+    "a space rocket dance",
+    "a fruit salad dance",
+    "a teddy bear dance",
+    "a snowy winter dance",
+    "a train choo choo dance",
+    "a bubble bath dance",
+    "a colours dance",
+    "a counting one two three dance",
+    "a happy kitten dance"
+  ],
+  "compilations": [
+    {
+      "lang": "en",
+      "video_id": "Vw2W4eoJmPQ",
+      "title": "Nursery Rhymes Collection | 7 Songs | 4 Min",
+      "at": "2026-10-11T09:06:42.666467+00:00"
+    }
+  ]
+}

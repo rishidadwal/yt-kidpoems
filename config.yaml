@@ -1,0 +1,76 @@
+# ---------- What to make ----------
+content_mode: alternate      # poem | dance | alternate (dance song one day, poem the next)
+videos_per_run: 1            # poems per run (each is rendered in every language below)
+make_shorts: true            # also make a vertical <60s Short when the poem is short enough
+review_mode: true            # true = always PRIVATE (you publish by hand). false = use "publish" below
+publish:
+  mode: scheduled            # scheduled = auto-public at time_ist · public = public immediately · private
+  time_ist: "17:00"          # daily go-live time (evening = peak time for kids' content in India)
+upload: true                 # false = only render files into output/
+
+# ---------- AI (free tier) ----------
+llm_model: gemini-2.5-flash  # free Gemini API model name (change if Google renames it)
+
+# ---------- Languages ----------
+# code: used for file names · name: told to the AI · voice: free Microsoft Edge neural voice
+# See all voices:  edge-tts --list-voices
+languages:
+  - {code: en, name: English, voice: en-US-AnaNeural,       font: "Noto Sans"}
+  - {code: hi, name: Hindi,   voice: hi-IN-SwaraNeural,     font: "Noto Sans Devanagari"}
+  - {code: es, name: Spanish, voice: es-MX-DaliaNeural,     font: "Noto Sans"}
+# Add more any time, e.g.:
+#  - {code: ar, name: Arabic,     voice: ar-EG-SalmaNeural,   font: "Noto Sans Arabic"}
+#  - {code: bn, name: Bengali,    voice: bn-IN-TanishaaNeural,font: "Noto Sans Bengali"}
+#  - {code: pt, name: Portuguese, voice: pt-BR-FranciscaNeural,font: "Noto Sans"}
+#  - {code: fr, name: French,     voice: fr-FR-DeniseNeural,  font: "Noto Sans"}
+#  - {code: id, name: Indonesian, voice: id-ID-GadisNeural,   font: "Noto Sans"}
+#  - {code: ja, name: Japanese,   voice: ja-JP-NanamiNeural,  font: "Noto Sans CJK JP"}
+#  - {code: ta, name: Tamil,      voice: ta-IN-PallaviNeural, font: "Noto Sans Tamil"}
+
+# ---------- One YouTube channel per language (recommended) ----------
+# Each language points to a secret prefix; the token env vars are YT_<PREFIX>_REFRESH_TOKEN.
+# If a language has no token, its video is rendered but not uploaded.
+channels:
+  en: EN
+  hi: HI
+  es: ES
+
+# ---------- Look & sound ----------
+# classic     = glossy 3D cartoon pictures (art_style), zoom/pan moves, bold karaoke, floating stars
+# picturebook = crayon storybook pages: wax crayon on paper, lines that "boil" at 12 fps, calm camera drift,
+#               paper page turns, handwritten words (English/Spanish; other scripts keep their Noto font)
+look: picturebook
+dance_look: classic          # look for dance songs only: classic = bright glossy 3D party (omit to use "look")
+picturebook_art_style: "children's picture book illustration drawn in wax crayon with a soft watercolour wash on warm off-white textured paper, simple chunky rounded shapes, thick dark indigo outlines, a small box of bright crayon colours, plenty of bare paper, child-like perspective, cosy and tender, cute characters with dot eyes and pink cheeks, storybook page, 16:9, no text, no letters, no watermark"
+art_style: "high quality 3D animated cartoon render, glossy soft materials, cute rounded chubby characters with big shiny eyes and wide happy open-mouth smiles, vibrant saturated colours, warm soft sunlight, gentle depth of field, lush tropical jungle clearing with big leaves and pink flowers, colourful floating balloons, blue sky with fluffy clouds, joyful dynamic dancing poses, kids TV show quality, 16:9 cinematic, no text, no letters, no watermark"
+cast: "Pip, a chubby curly-haired toddler in a yellow striped onesie; Gigi, a baby giraffe with a tiny pink bow; Momo, a round fluffy panda cub; and Quack, a little yellow duckling with an orange cap"
+voice_rate: "-5%"           # slower = easier for kids
+voice_pitch: "+15Hz"         # a little brighter
+music_volume: 0.35           # backing track level (0 = off). Uses assets/music/*.mp3 if present, otherwise auto-generates a free happy tune
+
+# ---------- Level 2: real singing + animated scenes on a FREE Kaggle GPU ----------
+# Needs GitHub Secrets KAGGLE_USERNAME + KAGGLE_KEY and a phone-verified Kaggle account.
+# If Kaggle is missing, busy or fails, every item automatically falls back to Level 1.
+gpu:
+  enabled: true
+  singing: true
+  sing_languages: [en, hi, es]     # ACE-Step sings best in: en, zh, ru, es, ja, de, fr, pt, it, ko
+  music_tags: "children's song, nursery rhyme, cheerful, happy, bright female vocal, kids choir, ukulele, xylophone, glockenspiel, handclaps, bouncy, 110 bpm"
+  dance_music_tags: "kids dance song, party pop, EDM kids, 128 bpm, super catchy chant, four on the floor kick, claps, whistles, cheerful kids choir, bright synth, fun, energetic"
+  song_steps: 60
+  animate: true
+  hd_images: true                  # SDXL on the GPU: sharper, more consistent pictures than the free API
+  image_model: "stabilityai/stable-diffusion-xl-base-1.0"
+  max_animated_scenes: 8           # others stay as moving pictures (saves GPU time)
+  video_model: "Lightricks/LTX-Video"
+  clip_frames: 97                  # ~4 s per scene at 24 fps
+  clip_steps: 30
+  clip_budget_minutes: 120
+  timeout_minutes: 170             # give up waiting after this and use Level 1
+
+# ---------- Weekly compilation (long video = more watch time) ----------
+compilation:
+  enabled: true
+  videos: 7                  # last N videos per language joined into one long video
+  mode: any                  # any | dance | poem
+  keep_archive: 40           # how many recent videos to keep per language in the GitHub archive

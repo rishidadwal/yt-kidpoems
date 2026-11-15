@@ -1,0 +1,4 @@
+---
+alwaysApply: true
+---
+Read RULES.md, docs/TESTING.md and the current task in TASKS.md before any change. Tests first. Never weaken tests. Keep Made for Kids + synthetic disclosure. Run `make verify` before finishing. Update docs/MEMORY.md.

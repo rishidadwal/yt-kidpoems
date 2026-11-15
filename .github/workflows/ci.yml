@@ -1,0 +1,16 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-core fonts-noto-cjk libraqm0
+      - run: pip install -r requirements.txt ruff mypy pytest-cov pip-audit
+      - run: ruff check src tests
+      - run: python -m pytest -q --cov=src --cov-report=term-missing
+      - run: pip-audit -r requirements.txt || true   # becomes blocking in TASK-002
+      - name: Offline end-to-end smoke run
+        run: python -m src.pipeline --offline --no-upload || echo "needs network for TTS - replaced by a mocked e2e in TASK-006"

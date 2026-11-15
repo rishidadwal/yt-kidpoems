@@ -1,0 +1,74 @@
+name: daily-kid-poems
+on:
+  schedule:
+    - cron: "30 1 * * *"      # 07:00 IST every day (GitHub uses UTC)
+  workflow_dispatch:           # "Run workflow" button (GitHub or the Vercel dashboard)
+    inputs:
+      upload:
+        description: "Upload to YouTube?"
+        type: choice
+        options: ["yes", "no"]
+        default: "yes"
+concurrency: { group: kidpoems, cancel-in-progress: false }   # never two runs at once
+permissions:
+  contents: write              # to save data/history.json back to the repo
+jobs:
+  make:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - name: System packages (ffmpeg + fonts for every script)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-noto-core fonts-noto-cjk fonts-noto-color-emoji libraqm0
+      - run: pip install -r requirements.txt
+      - name: Check secrets (shows only SET / MISSING, never the values)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_EN_REFRESH_TOKEN: ${{ secrets.YT_EN_REFRESH_TOKEN }}
+          YT_HI_REFRESH_TOKEN: ${{ secrets.YT_HI_REFRESH_TOKEN }}
+          YT_ES_REFRESH_TOKEN: ${{ secrets.YT_ES_REFRESH_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          missing=0
+          for v in KAGGLE_USERNAME KAGGLE_KEY GEMINI_API_KEY YT_CLIENT_ID YT_CLIENT_SECRET YT_EN_REFRESH_TOKEN YT_HI_REFRESH_TOKEN YT_ES_REFRESH_TOKEN; do
+            if [ -n "${!v}" ]; then echo "✅ $v is SET"; else echo "❌ $v is MISSING"; missing=1; fi
+          done
+          if [ $missing = 1 ]; then echo "::warning::Some secrets are missing - add them in Settings > Secrets and variables > Actions > Repository secrets"; fi
+      - name: Make & upload
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_EN_REFRESH_TOKEN: ${{ secrets.YT_EN_REFRESH_TOKEN }}
+          YT_HI_REFRESH_TOKEN: ${{ secrets.YT_HI_REFRESH_TOKEN }}
+          YT_ES_REFRESH_TOKEN: ${{ secrets.YT_ES_REFRESH_TOKEN }}
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.upload }}" = "no" ]; then python -m src.pipeline --no-upload; else python -m src.pipeline; fi
+      - name: Keep videos, thumbnails and music for 7 days (download from the run page)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos
+          path: |
+            output/**/*.mp4
+            output/**/*.jpg
+            output/**/music.wav
+          retention-days: 7
+          if-no-files-found: ignore
+      - name: Save history
+        if: always()
+        run: |
+          git config user.name "kidpoems-bot"; git config user.email "bot@users.noreply.github.com"
+          git add data/history.json data/last_run.json && git commit -m "chore: update history [skip ci]" || exit 0
+          git pull --rebase -X theirs origin "$GITHUB_REF_NAME" || true
+          git push || true

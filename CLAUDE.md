@@ -1,0 +1,11 @@
+# Rules for the AI agent
+- Do one task at a time from TASKS.md. Never touch unrelated files. Ask when business or safety rules are unclear.
+- **Tests first.** Every function gets unit tests: happy path, each error path, boundaries. A bug fix starts with a failing test.
+- Python 3.12, fully typed. `ruff` and `mypy --strict` must show 0 errors. Validate external data with pydantic models.
+- No bare `except:`. Catch specific errors, log with context, retry or fall back. The run must never crash silently.
+- Every network call has an explicit timeout, retries with exponential backoff, and a fallback or clean skip.
+- Never weaken, skip or delete a test to make it pass. No `# type: ignore` or `noqa` without a written reason.
+- Children's safety is non-negotiable. Keep Made for Kids = true and synthetic media = true. Never remove the safety filter.
+- Only original or public-domain text. Never add copyrighted poems, songs or music.
+- Secrets only in environment variables. Never print tokens.
+- `make verify` must be green before a task is done. One Conventional Commit per task. Update TASKS.md and docs/MEMORY.md.
