@@ -9,7 +9,7 @@ publish:
 upload: true                 # false = only render files into output/
 
 # ---------- AI (free tier) ----------
-llm_model: gemini-2.5-flash  # free Gemini API model name (change if Google renames it)
+llm_model: gemini-3.8-flash  # free Gemini API model name (change if Google renames it)
 
 # ---------- Languages ----------
 # code: used for file names · name: told to the AI · voice: free Microsoft Edge neural voice

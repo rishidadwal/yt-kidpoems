@@ -55,8 +55,11 @@ def _upload_dataset(user: str, job_dir: Path) -> None:
         else:
             raise
     for _ in range(60):  # wait until Kaggle has processed the new version
-        if "ready" in _kaggle("datasets", "status", f"{user}/{DATASET}").lower():
-            return
+        try:
+            if "ready" in _kaggle("datasets", "status", f"{user}/{DATASET}").lower():
+                return
+        except RuntimeError as e:  # a just-created dataset can answer 403/404 until it is processed
+            print(f"[gpu] dataset not ready yet: {str(e)[-80:]}")
         time.sleep(10)
     raise RuntimeError("dataset never became ready")
 

@@ -439,3 +439,33 @@ def test_gemini_switches_to_a_live_model_when_the_name_is_retired(monkeypatch):
     monkeypatch.setattr(P.time, "sleep", lambda s: None)
     assert P._gemini("hi", "old-flash") == {"ok": 1}
     assert "gemini-3.1-flash:generateContent" in posted[-1]   # newest plain flash, not lite/image/pro
+
+
+def test_kaggle_status_waits_through_early_errors(monkeypatch, tmp_path):
+    """Right after create, Kaggle can answer 403 to the status call until the dataset is processed."""
+    from src import gpu
+    status = iter([RuntimeError("403 Client Error: Forbidden"), "pending", "ready"])
+
+    def fake(*args, **kw):
+        if args[1] == "status":
+            s = next(status)
+            if isinstance(s, Exception):
+                raise s
+            return s
+        return ""
+    monkeypatch.setattr(gpu, "_kaggle", fake)
+    monkeypatch.setattr(gpu.time, "sleep", lambda s: None)
+    gpu._upload_dataset("me", tmp_path)   # returns once ready, no exception
+
+
+def test_kaggle_status_gives_up_after_the_limit(monkeypatch, tmp_path):
+    from src import gpu
+
+    def fake(*args, **kw):
+        if args[1] == "status":
+            raise RuntimeError("403 Client Error: Forbidden")
+        return ""
+    monkeypatch.setattr(gpu, "_kaggle", fake)
+    monkeypatch.setattr(gpu.time, "sleep", lambda s: None)
+    with pytest.raises(RuntimeError, match="never became ready"):
+        gpu._upload_dataset("me", tmp_path)

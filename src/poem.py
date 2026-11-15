@@ -56,7 +56,7 @@ def _gemini(prompt: str, model: str, retries: int = 4) -> dict:
     last = None
     for attempt in range(retries):
         try:
-            r = requests.post(GEMINI_URL.format(model=model), headers={"x-goog-api-key": key}, json=body, timeout=90)
+            r = requests.post(GEMINI_URL.format(model=model), headers={"x-goog-api-key": key}, json=body, timeout=180)  # newer flash models think longer
             if r.status_code == 404:  # model name retired -> switch once to a live one
                 new = _live_flash_model(key)
                 if new and new != model:
