@@ -266,6 +266,7 @@ def test_ai_image_waits_out_free_rate_limit(monkeypatch, tmp_path):
     sleeps: list[float] = []
     monkeypatch.setattr(visuals.requests, "get", lambda *a, **k: replies.pop(0))
     monkeypatch.setattr(visuals.time, "sleep", sleeps.append)
+    monkeypatch.setattr(visuals.time, "monotonic", lambda: 1000.0)   # frozen clock: exact, not flaky
     monkeypatch.setattr(visuals, "_last_call", [0.0])
     assert visuals.ai_image("cat", "style", 400, 300, 1, tmp_path / "a.jpg")
     assert max(sleeps) >= visuals.MIN_GAP_S   # waited a full rate-limit window before the retry
