@@ -364,3 +364,19 @@ def test_gemini_key_goes_in_a_header_not_the_url(monkeypatch):
     assert P._gemini("hi", "m") == {"ok": 1}
     assert seen["headers"]["x-goog-api-key"] == "AQ.SECRET123"
     assert "SECRET123" not in seen["url"] and "key" not in (seen.get("params") or {})
+
+
+def test_youtube_token_script_needs_no_file_and_hides_secrets(monkeypatch):
+    import get_youtube_token as G
+    cfg = G.client_config("123.apps.googleusercontent.com", "s3cret")
+    assert cfg["installed"]["client_secret"] == "s3cret"
+    with pytest.raises(ValueError):
+        G.client_config("not-a-client-id", "s3cret")
+    with pytest.raises(ValueError):
+        G.client_config("123.apps.googleusercontent.com", "")
+    calls: list = []
+    monkeypatch.setattr(G.subprocess, "run", lambda cmd, **kw: calls.append((cmd, kw)))
+    G.set_secret("o/r", "YT_CLIENT_SECRET", "s3cret")
+    cmd, kw = calls[0]
+    assert "s3cret" not in " ".join(cmd) and kw["input"] == "s3cret" and kw["timeout"]
+    assert G.main(["x"]) == 2   # usage error, nothing asked
