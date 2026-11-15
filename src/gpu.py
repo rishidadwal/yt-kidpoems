@@ -5,7 +5,7 @@ Flow (all via the official `kaggle` CLI):
   2. push kaggle/gpu_job.py as a private GPU notebook that reads that dataset
   3. poll until it finishes, then download /kaggle/working/out
 Any failure returns an empty result -> the pipeline silently falls back to Level 1 for that item.
-Needs env: KAGGLE_USERNAME, KAGGLE_KEY (GitHub Secrets). Your Kaggle account must be phone-verified
+Needs env: KAGGLE_USERNAME + KAGGLE_API_TOKEN (or legacy KAGGLE_KEY) (GitHub Secrets). Your Kaggle account must be phone-verified
 (Kaggle requires this for GPU + internet in notebooks).
 """
 from __future__ import annotations
@@ -32,7 +32,8 @@ class GpuResult:
 
 
 def available() -> bool:
-    return bool(os.environ.get("KAGGLE_USERNAME") and os.environ.get("KAGGLE_KEY") and shutil.which("kaggle"))
+    key = os.environ.get("KAGGLE_API_TOKEN") or os.environ.get("KAGGLE_KEY")  # new API token, or the legacy key
+    return bool(os.environ.get("KAGGLE_USERNAME") and key and shutil.which("kaggle"))
 
 
 def _kaggle(*args: str, timeout: int = 600) -> str:
@@ -92,7 +93,7 @@ def _wait(user: str, timeout_min: int) -> str:
 def run(job: dict, images: list[Path], work: Path, timeout_min: int = 150) -> GpuResult:
     res = GpuResult()
     if not available():
-        res.notes.append("Kaggle not configured (KAGGLE_USERNAME / KAGGLE_KEY) - using Level 1")
+        res.notes.append("Kaggle not configured (KAGGLE_USERNAME + KAGGLE_API_TOKEN) - using Level 1")
         return res
     user = os.environ["KAGGLE_USERNAME"]
     try:

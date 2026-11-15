@@ -380,3 +380,17 @@ def test_youtube_token_script_needs_no_file_and_hides_secrets(monkeypatch):
     cmd, kw = calls[0]
     assert "s3cret" not in " ".join(cmd) and kw["input"] == "s3cret" and kw["timeout"]
     assert G.main(["x"]) == 2   # usage error, nothing asked
+
+
+def test_gpu_accepts_new_kaggle_api_token(monkeypatch):
+    from src import gpu
+    monkeypatch.setattr(gpu.shutil, "which", lambda n: "/bin/kaggle")
+    for v in ("KAGGLE_USERNAME", "KAGGLE_KEY", "KAGGLE_API_TOKEN"):
+        monkeypatch.delenv(v, raising=False)
+    monkeypatch.setenv("KAGGLE_USERNAME", "me")
+    assert not gpu.available()                      # username alone is not enough
+    monkeypatch.setenv("KAGGLE_API_TOKEN", "t")
+    assert gpu.available()                          # new token type (kaggle CLI >= 1.8)
+    monkeypatch.delenv("KAGGLE_API_TOKEN")
+    monkeypatch.setenv("KAGGLE_KEY", "k")
+    assert gpu.available()                          # legacy key still works
