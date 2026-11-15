@@ -44,7 +44,9 @@ def ai_image(prompt: str, style: str, w: int, h: int, seed: int, out: Path, retr
             if r.ok and r.headers.get("content-type", "").startswith("image") and len(r.content) > 20_000:
                 out.write_bytes(r.content)
                 im = Image.open(out).convert("RGB")
-                if im.size != (w, h):  # service may return a smaller image -> high-quality upscale
+                cw, ch = im.size  # trim 6% per side: removes the corner watermark the free API adds
+                im = im.crop((cw * 6 // 100, ch * 6 // 100, cw * 94 // 100, ch * 94 // 100))
+                if im.size != (w, h):  # cropped / smaller image -> high-quality upscale
                     im = im.resize((w, h), Image.LANCZOS)
                 im.save(out, "JPEG", quality=95)
                 return True

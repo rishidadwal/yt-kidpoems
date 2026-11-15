@@ -109,6 +109,7 @@ def make_one(cfg: dict, hist: dict, offline: bool) -> list[dict]:
     subs_fonts = picturebook.FONT_DIR if look == "picturebook" else fonts
 
     # one picture per line, shared by every language (Shorts reuse them over a blurred background)
+    master["image_prompts"] = P.with_cast(master["image_prompts"], str(cfg.get("cast", "")))
     scenes = visuals.make_scenes(master["image_prompts"], style, 1920, 1080, seed, job / "scenes", offline)
 
     # 1) text for every language first (so the GPU job can sing all of them in one go)

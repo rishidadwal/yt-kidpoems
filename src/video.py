@@ -16,7 +16,7 @@ import numpy as np
 from . import picturebook as pb
 
 FPS = 25
-LEAD = 1.6   # title card before singing starts
+LEAD = 0.6   # short title flash: the song must start within the first second (hook)
 GAP = 0.35   # pause between lines
 TAIL = 2.5   # ending card
 XF = 0.4     # transition length (seconds)

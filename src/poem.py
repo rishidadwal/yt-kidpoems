@@ -77,7 +77,7 @@ def _gemini(prompt: str, model: str, retries: int = 4) -> dict:
 
 def _validate(p: dict, need_prompts: bool = True) -> dict:
     lines = [str(x).strip() for x in p.get("lines", []) if str(x).strip()]
-    if not (4 <= len(lines) <= 24):
+    if not (4 <= len(lines) <= 32):
         raise PoemError(f"bad line count {len(lines)}")
     if any(len(ln) > 90 for ln in lines):
         raise PoemError("line too long")
@@ -104,6 +104,17 @@ member the same way every time. Vary the shot (close-up, wide, from above). Neve
 def cast_members(cast: str) -> list[str]:
     """'Pip, a toddler; Gigi, a giraffe; and Quack, a duck' -> one entry per character (whole string if no ';')."""
     return [m for m in (re.sub(r"^and\s+", "", x.strip()) for x in cast.split(";")) if m] or [cast]
+
+
+def with_cast(prompts: list[str], cast: str) -> list[str]:
+    """Add the full look of every cast member named in a prompt, so each picture draws them the same way
+    (the AI writes only 'Gigi dances' and the image model would invent a new giraffe every scene)."""
+    members = cast_members(cast)
+    out = []
+    for p in prompts:
+        named = [m for m in members if "," in m and m.split(",", 1)[0].strip().lower() in p.lower()]
+        out.append(f"{p}. Characters: {'; '.join(named)}" if named else p)
+    return out
 
 
 def write_original(topic: str, model: str, cast: str = "two happy little kids and a fluffy orange kitten") -> dict:
@@ -181,7 +192,7 @@ def write_dance(topic: str, model: str, cast: str = "two happy little kids and a
 {SAFETY_RULES}
 Style: a tiny silly nonsense HOOK of 2-4 made-up syllables (invent a NEW one, never copy an existing song or any
 known hook), repeated many times, plus simple ACTION calls kids can copy (clap, jump, spin, wiggle, stomp, wave, hop).
-Structure (12 to 16 short lines, max 6 words each): the FIRST line is the HOOK, then action line, action line, HOOK -
+Structure (24 to 32 short lines, so the song lasts 2+ minutes; max 6 words each): the FIRST line is the HOOK, then action line, action line, HOOK -
 repeat with new actions; the hook line appears at least 5 times, exactly the same each time, and is the last line.
 Action lines speak to the child ("Can you jump? Jump jump jump!") and the last round is the biggest and silliest.
 For each line give ONE action word from: {", ".join(ACTIONS)}.
@@ -211,7 +222,7 @@ def builtin_dance(seed: int, cast: str = "two happy little kids and a fluffy ora
     syl = ["bo", "ba", "zum", "zee", "pom", "pa", "tiki", "tak", "boo", "dee", "loo", "bim", "bam", "yay", "wooz", "kiki"]
     a, b = rnd.sample(syl, 2)
     hook = f"{a.title()} {a} {b} {b}!"
-    moves = rnd.sample(ACTIONS, 6)
+    moves = rnd.sample(ACTIONS, 12)
     calls = {"CLAP": "Clap your hands, clap clap clap!", "JUMP": "Jump up high, jump jump jump!",
              "SPIN": "Spin around, spin spin spin!", "WIGGLE": "Wiggle wiggle, wiggle your tail!",
              "STOMP": "Stomp your feet, stomp stomp stomp!", "WAVE": "Wave hello, wave wave wave!",
@@ -219,7 +230,7 @@ def builtin_dance(seed: int, cast: str = "two happy little kids and a fluffy ora
              "TWIST": "Twist to the left, twist to the right!", "SWAY": "Sway like a tree, sway sway!",
              "BOUNCE": "Bounce bounce bounce, bounce like a ball!", "TAP": "Tap your toes, tap tap tap!"}
     lines, actions = [], []
-    for k in range(3):
+    for k in range(6):  # 6 rounds = 24 lines, about 2 minutes
         m1, m2 = moves[2 * k], moves[2 * k + 1]
         lines += [hook, calls[m1], calls[m2], hook]
         actions += ["BOUNCE", m1, m2, "SPIN"]

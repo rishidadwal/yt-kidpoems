@@ -211,7 +211,7 @@ def test_upload_sets_publish_at(tmp_path):
 # ---------------- dance mode ----------------
 def test_builtin_dance_is_catchy_and_complete():
     d = P.builtin_dance(7)
-    assert d["mode"] == "dance" and len(d["lines"]) == len(d["actions"]) == len(d["image_prompts"]) == 12
+    assert d["mode"] == "dance" and len(d["lines"]) == len(d["actions"]) == len(d["image_prompts"]) == 24
     assert d["lines"].count(d["hook"]) >= 5 and all(a in P.ACTIONS for a in d["actions"])
 
 
@@ -469,3 +469,38 @@ def test_kaggle_status_gives_up_after_the_limit(monkeypatch, tmp_path):
     monkeypatch.setattr(gpu.time, "sleep", lambda s: None)
     with pytest.raises(RuntimeError, match="never became ready"):
         gpu._upload_dataset("me", tmp_path)
+
+
+def test_with_cast_adds_full_look_of_named_members_only():
+    from src import poem as P
+    cast = "Pip, a bunny in a yellow onesie; Gigi, a giraffe with a pink bow; and Momo, a panda cub"
+    out = P.with_cast(["Gigi spins", "a sunny beach", "pip and momo hop"], cast)
+    assert out[0] == "Gigi spins. Characters: Gigi, a giraffe with a pink bow"
+    assert out[1] == "a sunny beach"
+    assert "Pip, a bunny in a yellow onesie" in out[2] and "Momo, a panda cub" in out[2]
+
+
+def test_builtin_dance_is_long_enough_for_two_minutes():
+    from src import poem as P
+    d = P.builtin_dance(7)
+    assert len(d["lines"]) == 24 == len(d["image_prompts"]) == len(d["actions"])
+
+
+def test_ai_image_trims_watermark_border(tmp_path, monkeypatch):
+    import io
+
+    from PIL import Image
+
+    from src import visuals
+    img = Image.new("RGB", (1000, 500), "red")
+    img.paste((0, 0, 255), (960, 480, 1000, 500))  # "watermark" in the corner
+    buf = io.BytesIO(); img.save(buf, "PNG"); data = buf.getvalue() + b"\0" * 30_000
+
+    class R:
+        ok, status_code, headers, content = True, 200, {"content-type": "image/png"}, data
+    monkeypatch.setattr(visuals.requests, "get", lambda *a, **k: R())
+    monkeypatch.setattr(visuals, "_wait_turn", lambda: None)
+    out = tmp_path / "a.jpg"
+    assert visuals.ai_image("x", "s", 1000, 500, 1, out)
+    px = Image.open(out).getpixel((990, 495))
+    assert px[0] > 200 and px[2] < 60  # corner is red now, the blue mark was cut off
