@@ -92,7 +92,7 @@ def make_songs():
     if not JOB.get("songs"):
         return
     try:
-        pip("faster-whisper", "soundfile")
+        pip("-U", "faster-whisper", "av", "soundfile")  # old preinstalled pair broke: open() metadata_errors
         try:
             pip("git+https://github.com/ace-step/ACE-Step.git")
         except RuntimeError as e:  # its strict pins clash with Kaggle's torch; install without them

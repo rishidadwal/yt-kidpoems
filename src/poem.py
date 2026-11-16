@@ -172,11 +172,13 @@ def public_domain(history: dict) -> dict:
     rhymes = json.loads((DATA / "public_domain_rhymes.json").read_text(encoding="utf-8"))
     left = [r for r in rhymes if r["title"] not in history["done_rhymes"]] or rhymes
     r = random.choice(left)
+    rounds = min(3, -(-12 // len(r["lines"])))  # short rhymes are sung 2-3 times (kids love repeats; 4 lines = 20 s)
+    shots = ["wide shot", "close-up", "seen from above"]
     return {
         "title": r["title"],
-        "lines": r["lines"],
-        "image_prompts": [f"Nursery rhyme '{r['title']}' scene: {ln} - with two happy little kids and a fluffy orange kitten playing"
-                          for ln in r["lines"]],
+        "lines": r["lines"] * rounds,
+        "image_prompts": [f"Nursery rhyme '{r['title']}' scene, {shots[k]}: {ln} - with two happy little kids and a "
+                          f"fluffy orange kitten playing" for k in range(rounds) for ln in r["lines"]],
         "description": f"{r['title']} - a classic nursery rhyme for kids to sing along.\n\n" + "\n".join(r["lines"]),
         "tags": ["nursery rhymes", "kids songs", r["title"].lower(), "rhymes for children"],
         "_public_domain": True,

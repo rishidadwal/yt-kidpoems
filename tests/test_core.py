@@ -528,3 +528,10 @@ def test_gemini_429_switches_to_lite_model(monkeypatch):
     monkeypatch.setattr(P.time, "sleep", lambda s: None)
     assert P._gemini("hi", "gemini-3.8-flash") == {"ok": 1}
     assert len(seen) == 2 and P.LITE_MODEL in seen[1]
+
+
+def test_short_public_domain_rhyme_is_repeated():
+    from src import poem as P
+    d = P.public_domain({"done_rhymes": []})
+    assert len(d["lines"]) >= 12 or len(d["lines"]) % 3 == 0
+    assert len(d["lines"]) == len(d["image_prompts"]) and len(set(d["image_prompts"])) == len(d["image_prompts"])
