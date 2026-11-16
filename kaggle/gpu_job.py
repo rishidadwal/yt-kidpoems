@@ -98,7 +98,7 @@ def make_songs():
         except RuntimeError as e:  # its strict pins clash with Kaggle's torch; install without them
             STATUS["errors"].append(f"ace-step full install failed, retrying --no-deps: {str(e)[-400:]}")
             pip("--no-deps", "git+https://github.com/ace-step/ACE-Step.git")
-            pip("diffusers", "transformers", "accelerate", "librosa", "loguru", "py3langid", "hangul-romanize",
+            pip("diffusers", "transformers", "accelerate", "librosa", "loguru", "py3langid<0.3", "hangul-romanize",
                 "num2words", "spacy", "pypinyin", "cutlet", "fugashi[unidic-lite]", "datasets", "matplotlib")
         import torch
         from acestep.pipeline_ace_step import ACEStepPipeline
