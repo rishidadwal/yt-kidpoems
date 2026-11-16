@@ -45,6 +45,9 @@ def _live_flash_model(key: str) -> str | None:
     return max(flash, key=_version) if flash else None
 
 
+LITE_MODEL = "gemini-flash-lite-latest"
+
+
 def _gemini(prompt: str, model: str, retries: int = 4) -> dict:
     key = os.environ.get("GEMINI_API_KEY")
     if not key:
@@ -63,6 +66,10 @@ def _gemini(prompt: str, model: str, retries: int = 4) -> dict:
                     print(f"[warn] Gemini model {model!r} is gone; using {new!r} (update llm_model in config.yaml)")
                     model = new
                     continue
+            if r.status_code == 429 and model != LITE_MODEL:  # daily free quota used up -> lite has its own quota
+                print(f"[warn] Gemini {model!r} quota used up (429); trying {LITE_MODEL!r}")
+                model = LITE_MODEL
+                continue
             if r.status_code == 429 or r.status_code >= 500:  # free-tier rate limit / server busy
                 raise PoemError(f"HTTP {r.status_code}")
             r.raise_for_status()

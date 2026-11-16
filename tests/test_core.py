@@ -504,3 +504,27 @@ def test_ai_image_trims_watermark_border(tmp_path, monkeypatch):
     assert visuals.ai_image("x", "s", 1000, 500, 1, out)
     px = Image.open(out).getpixel((990, 495))
     assert px[0] > 200 and px[2] < 60  # corner is red now, the blue mark was cut off
+
+
+def test_gemini_429_switches_to_lite_model(monkeypatch):
+    from src import poem as P
+    seen = []
+
+    class R:
+        def __init__(self, code):
+            self.status_code = code
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"candidates": [{"content": {"parts": [{"text": '{"ok": 1}'}]}}]}
+
+    def post(url, **k):
+        seen.append(url)
+        return R(429 if "lite" not in url else 200)
+    monkeypatch.setenv("GEMINI_API_KEY", "x")
+    monkeypatch.setattr(P.requests, "post", post)
+    monkeypatch.setattr(P.time, "sleep", lambda s: None)
+    assert P._gemini("hi", "gemini-3.8-flash") == {"ok": 1}
+    assert len(seen) == 2 and P.LITE_MODEL in seen[1]
