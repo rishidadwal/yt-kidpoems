@@ -102,7 +102,7 @@ def make_songs():
                 "num2words", "spacy", "pypinyin", "cutlet", "fugashi[unidic-lite]", "datasets", "matplotlib")
         import torch
         from acestep.pipeline_ace_step import ACEStepPipeline
-        bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+        bf16 = torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8  # T4 claims bf16 but has no kernels
         pipe = ACEStepPipeline(checkpoint_dir=None, dtype="bfloat16" if bf16 else "float32",
                                cpu_offload=not bf16, overlapped_decode=True)
     except Exception as e:  # noqa: BLE001
