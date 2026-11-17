@@ -177,6 +177,15 @@
       "privacy": "private",
       "publish_at": null,
       "short_id": "-GY8hvFslek"
+    },
+    {
+      "lang": "en",
+      "title": "Dee dee loo loo! Dance Song",
+      "video_id": "ifpSTeFBrow",
+      "mode": "dance",
+      "at": "2026-11-17T12:01:41.740122+00:00",
+      "privacy": "private",
+      "publish_at": null
     }
   ],
   "done_dance_topics": [
@@ -201,7 +210,8 @@
     "a pirate ship dance",
     "a rainbow dance",
     "a jungle animal dance party",
-    "a silly monkey dance"
+    "a silly monkey dance",
+    "a rainy day puddle dance"
   ],
   "compilations": [
     {
