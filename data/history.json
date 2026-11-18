@@ -1,6 +1,7 @@
 {
   "done_topics": [
-    "a little elephant who loves bath time"
+    "a little elephant who loves bath time",
+    "counting stars from one to ten"
   ],
   "done_rhymes": [
     "Rain Rain Go Away",
@@ -184,6 +185,15 @@
       "video_id": "ifpSTeFBrow",
       "mode": "dance",
       "at": "2026-11-17T12:01:41.740122+00:00",
+      "privacy": "private",
+      "publish_at": null
+    },
+    {
+      "lang": "en",
+      "title": "Count the Stars to Ten",
+      "video_id": "-xFr8c3f1ZU",
+      "mode": "poem",
+      "at": "2026-11-18T10:13:28.717223+00:00",
       "privacy": "private",
       "publish_at": null
     }

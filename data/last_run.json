@@ -1,26 +1,26 @@
 {
-  "at": "2026-11-17T12:01:46.930144+00:00",
+  "at": "2026-11-18T10:13:34.397621+00:00",
   "offline": false,
   "upload": true,
   "results": [
     {
-      "lang": "en",
-      "title": "Dee dee loo loo! Dance Song",
-      "status": "uploaded",
-      "level": 2,
-      "video_id": "ifpSTeFBrow"
-    },
-    {
       "lang": "hi",
-      "title": "दी दी लू लू - मस्ती भरा एक्शन गीत",
-      "status": "rendered",
-      "level": 2
+      "title": "Count the Stars to Ten",
+      "status": "error",
+      "error": "Gemini failed after 4 tries: HTTP 503"
     },
     {
       "lang": "es",
-      "title": "¡A bailar con Dee Dee Loo Loo!",
-      "status": "rendered",
-      "level": 2
+      "title": "Count the Stars to Ten",
+      "status": "error",
+      "error": "Gemini failed after 4 tries: HTTP 503"
+    },
+    {
+      "lang": "en",
+      "title": "Count the Stars to Ten",
+      "status": "uploaded",
+      "level": 2,
+      "video_id": "-xFr8c3f1ZU"
     }
   ]
 }
