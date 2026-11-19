@@ -196,6 +196,15 @@
       "at": "2026-11-18T10:13:28.717223+00:00",
       "privacy": "private",
       "publish_at": null
+    },
+    {
+      "lang": "en",
+      "title": "Kiki kiki wooz wooz! Dance Song",
+      "video_id": "3kwjnHzFPes",
+      "mode": "dance",
+      "at": "2026-11-19T11:12:42.196765+00:00",
+      "privacy": "private",
+      "publish_at": null
     }
   ],
   "done_dance_topics": [
@@ -221,7 +230,8 @@
     "a rainbow dance",
     "a jungle animal dance party",
     "a silly monkey dance",
-    "a rainy day puddle dance"
+    "a rainy day puddle dance",
+    "a birthday party dance"
   ],
   "compilations": [
     {

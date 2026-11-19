@@ -1,26 +1,26 @@
 {
-  "at": "2026-11-18T10:13:34.397621+00:00",
+  "at": "2026-11-19T11:12:48.503010+00:00",
   "offline": false,
   "upload": true,
   "results": [
     {
       "lang": "hi",
-      "title": "Count the Stars to Ten",
+      "title": "Kiki kiki wooz wooz! Dance Song",
       "status": "error",
-      "error": "Gemini failed after 4 tries: HTTP 503"
+      "error": "Gemini failed after 4 tries: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=180)"
     },
     {
       "lang": "es",
-      "title": "Count the Stars to Ten",
+      "title": "Kiki kiki wooz wooz! Dance Song",
       "status": "error",
-      "error": "Gemini failed after 4 tries: HTTP 503"
+      "error": "Gemini failed after 4 tries: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Read timed out. (read timeout=180)"
     },
     {
       "lang": "en",
-      "title": "Count the Stars to Ten",
+      "title": "Kiki kiki wooz wooz! Dance Song",
       "status": "uploaded",
       "level": 2,
-      "video_id": "-xFr8c3f1ZU"
+      "video_id": "3kwjnHzFPes"
     }
   ]
 }
