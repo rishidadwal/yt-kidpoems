@@ -24,7 +24,8 @@
     "Humpty Dumpty",
     "Baa Baa Black Sheep",
     "Hey Diddle Diddle",
-    "Jack and Jill"
+    "Jack and Jill",
+    "Hickory Dickory Dock"
   ],
   "videos": [
     {
@@ -203,6 +204,15 @@
       "video_id": "3kwjnHzFPes",
       "mode": "dance",
       "at": "2026-11-19T11:12:42.196765+00:00",
+      "privacy": "private",
+      "publish_at": null
+    },
+    {
+      "lang": "en",
+      "title": "Hickory Dickory Dock",
+      "video_id": "uVvS3gvtht0",
+      "mode": "poem",
+      "at": "2026-11-20T10:25:50.062325+00:00",
       "privacy": "private",
       "publish_at": null
     }
