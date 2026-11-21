@@ -215,6 +215,15 @@
       "at": "2026-11-20T10:25:50.062325+00:00",
       "privacy": "private",
       "publish_at": null
+    },
+    {
+      "lang": "en",
+      "title": "Dampa Zampa Doo Dance Song",
+      "video_id": "QplhlbeA5xg",
+      "mode": "dance",
+      "at": "2026-11-21T12:03:19.159448+00:00",
+      "privacy": "private",
+      "publish_at": null
     }
   ],
   "done_dance_topics": [
@@ -241,7 +250,8 @@
     "a jungle animal dance party",
     "a silly monkey dance",
     "a rainy day puddle dance",
-    "a birthday party dance"
+    "a birthday party dance",
+    "a dinosaur stomp dance"
   ],
   "compilations": [
     {
