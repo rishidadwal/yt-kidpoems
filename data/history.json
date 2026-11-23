@@ -235,6 +235,15 @@
       "privacy": "private",
       "publish_at": null,
       "short_id": "CPZIzrNggk0"
+    },
+    {
+      "lang": "en",
+      "title": "Bam bam zum zum! Dance Song",
+      "video_id": "Z2hTIN1nlhw",
+      "mode": "dance",
+      "at": "2026-11-23T11:30:31.851259+00:00",
+      "privacy": "private",
+      "publish_at": null
     }
   ],
   "done_dance_topics": [
@@ -262,7 +271,8 @@
     "a silly monkey dance",
     "a rainy day puddle dance",
     "a birthday party dance",
-    "a dinosaur stomp dance"
+    "a dinosaur stomp dance",
+    "a sunny beach dance"
   ],
   "compilations": [
     {
