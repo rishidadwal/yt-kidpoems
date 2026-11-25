@@ -255,6 +255,15 @@
       "privacy": "private",
       "publish_at": null,
       "short_id": "OLnBrA6kAkY"
+    },
+    {
+      "lang": "en",
+      "title": "Boo boo bam bam! Dance Song",
+      "video_id": "hBmrnYQdAB4",
+      "mode": "dance",
+      "at": "2026-11-25T11:53:33.355924+00:00",
+      "privacy": "private",
+      "publish_at": null
     }
   ],
   "done_dance_topics": [
@@ -283,7 +292,8 @@
     "a rainy day puddle dance",
     "a birthday party dance",
     "a dinosaur stomp dance",
-    "a sunny beach dance"
+    "a sunny beach dance",
+    "a bedtime wiggle dance"
   ],
   "compilations": [
     {

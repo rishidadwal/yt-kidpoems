@@ -1,27 +1,26 @@
 {
-  "at": "2026-11-24T14:48:49.740950+00:00",
+  "at": "2026-11-25T11:53:43.734498+00:00",
   "offline": false,
   "upload": true,
   "results": [
     {
       "lang": "hi",
-      "title": "Twinkle Twinkle Little Star",
-      "status": "error",
-      "error": "Gemini failed after 4 tries: HTTP 503"
-    },
-    {
-      "lang": "es",
-      "title": "Twinkle Twinkle Little Star",
+      "title": "Boo boo bam bam! Dance Song",
       "status": "error",
       "error": "Gemini failed after 4 tries: HTTP 503"
     },
     {
       "lang": "en",
-      "title": "Twinkle Twinkle Little Star",
+      "title": "Boo boo bam bam! Dance Song",
       "status": "uploaded",
-      "level": 1,
-      "video_id": "uNkP8hLu0iE",
-      "short_id": "OLnBrA6kAkY"
+      "level": 2,
+      "video_id": "hBmrnYQdAB4"
+    },
+    {
+      "lang": "es",
+      "title": "¡A bailar con Boo Boo Bam Bam!",
+      "status": "rendered",
+      "level": 2
     }
   ]
 }
