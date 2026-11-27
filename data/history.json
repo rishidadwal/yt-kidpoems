@@ -275,6 +275,15 @@
       "privacy": "private",
       "publish_at": null,
       "short_id": "oEnO-YnXGUg"
+    },
+    {
+      "lang": "en",
+      "title": "Bo bo loo loo! Dance Song",
+      "video_id": "jBQnXtuYsfM",
+      "mode": "dance",
+      "at": "2026-11-27T12:09:31.848147+00:00",
+      "privacy": "private",
+      "publish_at": null
     }
   ],
   "done_dance_topics": [
@@ -304,7 +313,8 @@
     "a birthday party dance",
     "a dinosaur stomp dance",
     "a sunny beach dance",
-    "a bedtime wiggle dance"
+    "a bedtime wiggle dance",
+    "a farm animal disco"
   ],
   "compilations": [
     {
