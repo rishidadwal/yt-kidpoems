@@ -1,7 +1,8 @@
 {
   "done_topics": [
     "a little elephant who loves bath time",
-    "counting stars from one to ten"
+    "counting stars from one to ten",
+    "the colors of the rainbow"
   ],
   "done_rhymes": [
     "Rain Rain Go Away",
@@ -282,6 +283,15 @@
       "video_id": "jBQnXtuYsfM",
       "mode": "dance",
       "at": "2026-11-27T12:09:31.848147+00:00",
+      "privacy": "private",
+      "publish_at": null
+    },
+    {
+      "lang": "en",
+      "title": "Can You Paint the Rainbow Bright?",
+      "video_id": "S8hJ0hpvynw",
+      "mode": "poem",
+      "at": "2026-11-28T12:52:11.784054+00:00",
       "privacy": "private",
       "publish_at": null
     }

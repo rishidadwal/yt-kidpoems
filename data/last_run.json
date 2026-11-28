@@ -1,26 +1,26 @@
 {
-  "at": "2026-11-27T12:09:36.307185+00:00",
+  "at": "2026-11-28T12:52:16.106962+00:00",
   "offline": false,
   "upload": true,
   "results": [
     {
       "lang": "hi",
-      "title": "Bo bo loo loo! Dance Song",
-      "status": "error",
-      "error": "Gemini failed after 4 tries: HTTP 503"
-    },
-    {
-      "lang": "es",
-      "title": "Bo bo loo loo! Dance Song",
+      "title": "Can You Paint the Rainbow Bright?",
       "status": "error",
       "error": "Gemini failed after 4 tries: HTTP 503"
     },
     {
       "lang": "en",
-      "title": "Bo bo loo loo! Dance Song",
+      "title": "Can You Paint the Rainbow Bright?",
       "status": "uploaded",
-      "level": 2,
-      "video_id": "jBQnXtuYsfM"
+      "level": 1,
+      "video_id": "S8hJ0hpvynw"
+    },
+    {
+      "lang": "es",
+      "title": "¿Pintas el arcoíris brillante?",
+      "status": "rendered",
+      "level": 1
     }
   ]
 }
